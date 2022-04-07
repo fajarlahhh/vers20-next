@@ -98,7 +98,7 @@ const SignupFormSchema = Yup.object().shape({
   acceptTerms: Yup.bool().oneOf([true], 'Accept Ts & Cs is required'),
 });
 
-export default function Home() {
+export default function App() {
   const router = useRouter();
   const [referral, setReferral] = useState(router.query.ref);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -407,7 +407,7 @@ export default function Home() {
           uuid: uuid(),
           username: fields.username,
           email: fields.email,
-          password: bcryptjs.hashSync(fields.password, bcryptjs.genSaltSync()),
+          password: bcryptjs.hashSync(fields.password, 10),
           idContract: fields.contract,
           idParent: account.id,
           type: 1,
@@ -449,14 +449,6 @@ export default function Home() {
   const handleSubmit = async fields => {
     let error = '';
     const resAccount = await signUp('create', fields);
-    const contract = contracts.find(q => q.id === fields.contract);
-    const aviorNeed = contract.value * aviorPrice;
-
-    setProgress(
-      `Waiting for wallet response. You need ${aviorNeed} AVIOR to complete this process`,
-    );
-    window.onbeforeunload = () =>
-      "Don't leave this page while sign up is on progress";
 
     if (resAccount.data.message === 'The username already exists') {
       error = resAccount.data.message;
@@ -464,6 +456,13 @@ export default function Home() {
       setProgress('');
       window.onbeforeunload = () => null;
     } else {
+      const contract = contracts.find(obj => obj.id == fields.contract);
+      const aviorNeed = contract.value * aviorPrice;
+      setProgress(
+        `Waiting for wallet response. You need ${aviorNeed} AVIOR to complete this process`,
+      );
+      window.onbeforeunload = () =>
+        "Don't leave this page while sign up is on progress";
       const web3Contract = new web3Provider.eth.Contract(
         contractAbi,
         aviorContract,
@@ -490,10 +489,8 @@ export default function Home() {
           await signUp('create', resAccount);
           window.onbeforeunload = () => null;
         });
-
       if (error === '') {
         const resActive = await signUp('activate', resAccount);
-
         if (resActive.status === 200) {
           router.push({
             pathname: '/signup/success',
@@ -503,9 +500,9 @@ export default function Home() {
           });
         }
       }
-
       setProgress('');
       window.onbeforeunload = () => null;
+      disconnect();
     }
   };
 

@@ -19,6 +19,7 @@ module.exports = {
   },
   plugins: ['react', 'prettier'],
   rules: {
+    eqeqeq: 'off',
     'jsx-a11y/label-has-associated-control': [
       'error',
       {

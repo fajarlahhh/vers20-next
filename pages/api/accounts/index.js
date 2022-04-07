@@ -1,4 +1,4 @@
-import models from '../../db/models';
+import models from '../../../db/models';
 import nextConnect from 'next-connect';
 
 const Accounts = models.accounts;

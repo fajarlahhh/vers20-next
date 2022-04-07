@@ -19,7 +19,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
       },
       idContract: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: 'contracts',
         referencesKey: 'id',
