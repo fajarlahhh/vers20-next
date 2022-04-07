@@ -9,12 +9,46 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@walletconnect/web3-provider": "^1.7.7",
+    "axios": "^0.26.1",
+    "bcryptjs": "^2.4.3",
+    "env-cmd": "^10.1.0",
+    "formik": "^2.2.9",
+    "js-cookie": "^3.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.3.3",
     "next": "12.1.4",
+    "next-connect": "^0.12.2",
+    "next-session": "^4.0.4",
+    "next-transpile-modules": "^9.0.0",
     "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "react-dom": "18.0.0",
+    "react-google-recaptcha-v3": "^1.9.7",
+    "react-hook-mousetrap": "^2.0.4",
+    "react-perfect-scrollbar": "^1.5.8",
+    "sequelize": "^5.21.11",
+    "uuid": "^8.3.2",
+    "web3": "^1.7.1",
+    "web3modal": "^1.9.5",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "babel-eslint": "^10.1.0",
     "eslint": "8.12.0",
-    "eslint-config-next": "12.1.4"
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-next": "12.1.4",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.2",
+    "prettier": "^1.18.2",
+    "sequelize-cli": "^6.4.1"
   }
 }
