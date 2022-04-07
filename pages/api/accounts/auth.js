@@ -36,11 +36,8 @@ export default nextConnect().post(async (req, res) => {
   const token = jwt.sign({ sub: accounts.username }, 'Vers20 2022', {
     expiresIn: '1d',
   });
-
   return res.status(200).json({
-    username: accounts.username,
-    walletAddress: accounts.walletAddress,
-    contract: accounts.contract,
+    accounts,
     token,
   });
 });
