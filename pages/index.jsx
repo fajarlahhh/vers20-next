@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '../components/Layout';
-import { useSession, signIn, getSession } from 'next-auth/react';
+import { useSession, getSession } from 'next-auth/react';
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
@@ -21,7 +21,6 @@ export async function getServerSideProps(context) {
 
 function index() {
   const { data: session } = useSession();
-  console.log(session);
   return (
     <Layout
       headTitle="Dashboard"
@@ -36,7 +35,7 @@ function index() {
           <div className="promotion d-flex justify-content-between align-items-center">
             <div className="promotion-detail">
               <h3 className="text-white mb-3">
-                Discover, Collect, Sell <br /> and Create your Own NFT $
+                Discover, Collect, Sell <br /> and Create your Own NFT
               </h3>
               <p>
                 Digital marketplace for crypto collectibles and non fungable

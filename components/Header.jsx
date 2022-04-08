@@ -4,8 +4,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap';
 import { signOut } from 'next-auth/react';
+import { useEffect } from 'react';
 
 function Header({ session }) {
+  useEffect(() => {
+    console.log(session);
+  }, []);
   return (
     <>
       <div className="header">
@@ -44,8 +48,14 @@ function Header({ session }) {
                       <div className="user-email">
                         <div className="user">
                           <div className="user-info">
-                            <h5>Jannatul Maowa</h5>
-                            <span>imsaifun@gmail.com</span>
+                            <h5>{session.user.username}</h5>
+                            <span>
+                              {session.user.wallet.substring(0, 10)} ...{' '}
+                              {session.user.wallet.substring(
+                                session.user.wallet.length - 10,
+                                session.user.wallet.length,
+                              )}
+                            </span>
                           </div>
                         </div>
                       </div>

@@ -12,6 +12,7 @@ const Layout = ({
   pageClass,
   parent,
   child,
+  session,
 }) => {
   const [height, setHeight] = useState();
   useEffect(() => {
@@ -21,7 +22,7 @@ const Layout = ({
     <>
       <PageHead headTitle={headTitle} />
       <div id="main-wrapper" className={pageClass}>
-        <Header />
+        <Header session={session} />
         <Sidebar />
 
         <div className="content-body" style={{ minHeight: height - 122 }}>

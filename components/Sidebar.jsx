@@ -1,5 +1,8 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { signOut } from 'next-auth/react';
 
 function Sidebar() {
   const router = useRouter();
@@ -92,9 +95,9 @@ function Sidebar() {
                 </a>
               </Link>
             </li>
-            <li className={router.pathname == '/signin' ? 'active' : ' logout'}>
+            <li>
               <Link href="/signin">
-                <a>
+                <a onClick={() => signOut({ callbackUrl: '/signin' })}>
                   <span>
                     <i className="ri-logout-circle-line" />
                   </span>
