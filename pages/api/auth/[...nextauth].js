@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import models from '../../../db/models';
@@ -30,13 +31,28 @@ export default NextAuth({
           return null;
         }
 
-        return {
-          username: accounts.usename,
-          contract: accounts.contract,
-        };
+        return accounts;
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.username = user.username;
+        token.wallet = user.walletAddress;
+        token.contract = user.contract;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user = {
+        username: token.username,
+        wallet: token.wallet,
+        contract: token.contract,
+      };
+      return session;
+    },
+  },
   pages: {
     signIn: '/signin',
   },

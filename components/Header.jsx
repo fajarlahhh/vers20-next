@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap';
 import { signOut } from 'next-auth/react';
 
-function Header() {
+function Header({ session }) {
   return (
     <>
       <div className="header">
