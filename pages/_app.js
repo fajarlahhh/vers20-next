@@ -1,8 +1,14 @@
 import '../public/css/style.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
+import { SessionProvider } from 'next-auth/react';
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}) {
+  return (
+    <SessionProvider session={session}>
+      <Component {...pageProps} />
+    </SessionProvider>
+  );
 }
-
-export default MyApp;

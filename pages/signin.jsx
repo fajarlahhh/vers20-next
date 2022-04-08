@@ -1,14 +1,31 @@
 import Link from 'next/link';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import React, { useCallback, useEffect, useReducer, useState } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import Image from 'next/image';
 import {
   GoogleReCaptchaProvider,
   GoogleReCaptcha,
 } from 'react-google-recaptcha-v3';
-import axios from 'axios';
-import bcryptjs from 'bcryptjs';
+import { useRouter } from 'next/router';
+import { signIn, getCsrfToken, getSession } from 'next-auth/react';
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+    };
+  }
+  return {
+    props: {
+      csrfToken: await getCsrfToken(context),
+    },
+  };
+}
 
 const initialValues = {
   username: '',
@@ -22,19 +39,10 @@ const SigninFormSchema = Yup.object().shape({
     .required('Password is required'),
 });
 
-function Signin() {
+function Signin({ csrfToken }) {
+  const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
   const [isValidToken, setIsValidToken] = useState(false);
-
-  const handleSubmit = async fields => {
-    const result = await axios.post('/api/accounts/auth', {
-      username: fields.username,
-      password: fields.password,
-    });
-    if (result.data.message) {
-      setErrorMessage(result.data.message);
-    }
-  };
 
   const handleReCaptchaVerify = async token => {
     if (!token) {
@@ -74,12 +82,29 @@ function Signin() {
                     <Formik
                       initialValues={initialValues}
                       validationSchema={SigninFormSchema}
-                      onSubmit={async fields => {
-                        await handleSubmit(fields);
+                      onSubmit={async (fields, { setSubmitting }) => {
+                        const res = await signIn('credentials', {
+                          redirect: false,
+                          username: fields.username,
+                          password: fields.password,
+                          callbackUrl: `${window.location.origin}`,
+                        });
+                        if (res.error) {
+                          setErrorMessage(res.error);
+                        } else {
+                          setErrorMessage(null);
+                        }
+                        if (res.url) router.push(res.url);
+                        setSubmitting(false);
                       }}
                     >
                       {({ errors, touched, isSubmitting, isValid }) => (
                         <Form>
+                          <input
+                            name="csrfToken"
+                            type="hidden"
+                            defaultValue={csrfToken}
+                          />
                           <div className="row">
                             <div className="col-12 mb-3">
                               <label className="form-label" htmlFor="username">
@@ -122,23 +147,7 @@ function Signin() {
                                 className="invalid-feedback"
                               />
                             </div>
-                            <div className="col-6">
-                              <div className="form-check">
-                                <Field
-                                  id="acceptTerms"
-                                  type="checkbox"
-                                  name="acceptTerms"
-                                  className="form-check-input "
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor="acceptTerms"
-                                >
-                                  Remember me
-                                </label>
-                              </div>
-                            </div>
-                            <div className="col-6 text-end">
+                            <div className="col-12 text-end">
                               <Link href="/reset">
                                 <a>Forgot Password?</a>
                               </Link>
